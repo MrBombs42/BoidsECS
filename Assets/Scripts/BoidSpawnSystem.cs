@@ -8,6 +8,7 @@ using UnityEngine;
 using Unity.Burst;
 using Assets.Scripts;
 using Assets.Scripts.Movement;
+using Assets.Scripts.Wander;
 
 public partial class BoidSpawnSystem : SystemBase
 {
@@ -118,6 +119,8 @@ public partial class BoidSpawnSystem : SystemBase
                 var vel = new VelocityComponent { Velocity = randomVel, MaxSpeed = 100, MaxForce = 100 };
                 //now we set the velocity component in our asteroid prefab
                 commandBuffer.SetComponent(e, vel);
+
+                commandBuffer.AddComponent(e, new WanderComponent());
             }
         }).Schedule();
 

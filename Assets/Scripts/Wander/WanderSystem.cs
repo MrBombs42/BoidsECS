@@ -2,6 +2,9 @@
 using System;
 using Unity.Entities;
 using Unity.Mathematics;
+using Unity.Transforms;
+using UnityEngine;
+using Random = Unity.Mathematics.Random;
 
 namespace Assets.Scripts.Wander
 {
@@ -11,17 +14,29 @@ namespace Assets.Scripts.Wander
 
 		public const float CircleDistance = 2;
 		public const float CircleRadius = 1;
+		public const float TurnChance = 25;
+
 		protected override void OnUpdate()
 		{
+			var random = new Random((uint)(CircleDistance* TurnChance + CircleRadius));
 			Entities
 				.WithAll<WanderComponent>()
-				.ForEach((ref VelocityComponent velocity) =>
+				.ForEach((ref VelocityComponent velocity, in Translation position) =>
 				{
 					var circleCenter = new float3(velocity.Velocity.x, velocity.Velocity.y, velocity.Velocity.z);
 					circleCenter = math.normalize(circleCenter);
 					circleCenter *= CircleDistance;
 
-					var displacement = new float3(0, CircleRadius, 0);
+					if (random.NextFloat(0, 100) > TurnChance)
+					{
+						var displacement = random.NextFloat3Direction();
+						displacement *= CircleRadius;
+						var wander = circleCenter + displacement;
+						Debug.DrawRay(position.Value, wander, Color.green, 2);
+						velocity.Steering += wander;
+					}
+
+
 
 					//rotacionar displacement na direcao do wanderAngle
 					//rotacionar um pouco o angleDepois
