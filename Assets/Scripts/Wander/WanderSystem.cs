@@ -1,5 +1,4 @@
 ﻿using Assets.Scripts.Movement;
-using System;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
@@ -18,10 +17,10 @@ namespace Assets.Scripts.Wander
 
 		protected override void OnUpdate()
 		{
-			var random = new Random((uint)(CircleDistance* TurnChance + CircleRadius));
+			var random = new Random((uint)(CircleDistance * TurnChance + CircleRadius));
 			Entities
 				.WithAll<WanderComponent>()
-				.ForEach((ref VelocityComponent velocity, in Translation position) =>
+				.ForEach((ref VelocityComponent velocity, in LocalTransform localTransform) =>
 				{
 					var circleCenter = new float3(velocity.Velocity.x, velocity.Velocity.y, velocity.Velocity.z);
 					circleCenter = math.normalize(circleCenter);
@@ -32,7 +31,7 @@ namespace Assets.Scripts.Wander
 						var displacement = random.NextFloat3Direction();
 						displacement *= CircleRadius;
 						var wander = circleCenter + displacement;
-						Debug.DrawRay(position.Value, wander, Color.green, 2);
+						Debug.DrawRay(localTransform.Position, wander, Color.green, 2);
 						velocity.Steering += wander;
 					}
 

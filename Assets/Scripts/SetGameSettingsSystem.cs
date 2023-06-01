@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Assets.Scripts
 {
-	public class SetGameSettingsSystem : MonoBehaviour, IConvertGameObjectToEntity
+	public class SetGameSettingsSystem : MonoBehaviour
 	{
 		public int NumberOfBoids = 100;
 		public float LevelWidth = 50;
@@ -11,18 +11,21 @@ namespace Assets.Scripts
 		public float LevelDepth = 50;
 		public float AsteroidVelocity = 30;
 
-		public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
+		class Baker : Baker<SetGameSettingsSystem>
 		{
-			var settings = new GameSettingsComponent
+			public override void Bake(SetGameSettingsSystem authoring)
 			{
-				NumberOfBoids = this.NumberOfBoids,
-				LevelWidth = this.LevelWidth,
-				LevelDepth = this.LevelDepth,
-				LevelHeight = this.LevelHeight,
-				AsteroidVelocity = this.AsteroidVelocity,
-			};
-
-			dstManager.AddComponentData(entity, settings);
+				var entity = GetEntity(TransformUsageFlags.None);
+				AddComponent(entity, new GameSettingsComponent
+				{
+					NumberOfBoids = authoring.NumberOfBoids,
+					LevelWidth = authoring.LevelWidth,
+					LevelDepth = authoring.LevelDepth,
+					LevelHeight = authoring.LevelHeight,
+					AsteroidVelocity = authoring.AsteroidVelocity,
+				});
+			}
 		}
+
 	}
 }

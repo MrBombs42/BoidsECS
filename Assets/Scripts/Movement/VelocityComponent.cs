@@ -1,11 +1,8 @@
-﻿using System;
-using Unity.Entities;
+﻿using Unity.Entities;
 using Unity.Mathematics;
 
 namespace Assets.Scripts.Movement
 {
-	[Serializable]
-	[GenerateAuthoringComponent]
 	public struct VelocityComponent : IComponentData
 	{
 		public float MaxSpeed;

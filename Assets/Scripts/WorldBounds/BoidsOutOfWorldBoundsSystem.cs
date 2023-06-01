@@ -15,38 +15,38 @@ namespace Assets.Scripts.WorldBounds
 			var zBound = settings.LevelDepth / 2;
 
 			Entities
-				.WithAll<BoidComponent>()
-				.ForEach((Entity entity, int entityInQueryIndex, ref Translation position) =>
+				.WithAll<Boid>()
+				.ForEach((Entity entity, int entityInQueryIndex, ref LocalTransform localTransform) =>
 				{
 
-					if (position.Value.x > xBound)
+					if (localTransform.Position.x > xBound)
 					{
-						position.Value.x = -xBound;
+						localTransform.Position.x = -xBound;
 					}
 
-					if (position.Value.x < -xBound)
+					if (localTransform.Position.x < -xBound)
 					{
-						position.Value.x = xBound;
+						localTransform.Position.x = xBound;
 					}
 
-					if (position.Value.y > yBound)
+					if (localTransform.Position.y > yBound)
 					{
-						position.Value.y = -yBound;
+						localTransform.Position.y = -yBound;
 					}
 
-					if (position.Value.y < -yBound)
+					if (localTransform.Position.y < -yBound)
 					{
-						position.Value.y = yBound;
+						localTransform.Position.y = yBound;
 					}
 
-					if (position.Value.z > zBound)
+					if (localTransform.Position.z > zBound)
 					{
-						position.Value.z = -zBound;
+						localTransform.Position.z = -zBound;
 					}
 
-					if (position.Value.z < -zBound)
+					if (localTransform.Position.z < -zBound)
 					{
-						position.Value.z = zBound;
+						localTransform.Position.z = zBound;
 					}
 				})
 				.ScheduleParallel();
